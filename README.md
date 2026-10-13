@@ -31,31 +31,95 @@ Once all 9 pieces are solved, make a fist to shatter the completed photo and sta
 
 Make sure your computer has:
 
-- **Python 3.11**
+- **Python 3.11** (Python 3.11.9 is supported)
 - **Git**
+- **Visual Studio Code**
 - A webcam
 - Windows 10/11 recommended
 
 > **Important:** When installing Python, make sure **"Add Python to PATH"** is selected.
 
-You do **not** need to manually install OpenCV, MediaPipe, Pygame, or NumPy. The setup script will install the required Python packages for you.
+You do **not** need to manually install OpenCV, MediaPipe, Pygame, or NumPy. PuzzleCam's setup script will install the required Python packages automatically.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start with VS Code
 
-### 1. Clone PuzzleCam
+### 1. Open VS Code
 
-Open **PowerShell** and run:
+Open **Visual Studio Code**.
+
+From the top menu, select:
+
+```text
+Terminal → New Terminal
+```
+
+A terminal will appear at the bottom of VS Code.
+
+---
+
+### 2. Clone PuzzleCam
+
+In the VS Code terminal, run:
 
 ```powershell
 git clone https://github.com/Yukipsy/PuzzleCam-Python.git
+```
+
+Wait for Git to finish downloading the project.
+
+Then enter the project folder:
+
+```powershell
 cd PuzzleCam-Python
 ```
 
-### 2. Set Up PuzzleCam
+Your terminal should now end with something similar to:
 
-For the **first time only**, run:
+```text
+PS C:\Users\YourName\PuzzleCam-Python>
+```
+
+---
+
+### 3. Open the PuzzleCam Folder in VS Code
+
+In VS Code, select:
+
+```text
+File → Open Folder...
+```
+
+Select the newly cloned:
+
+```text
+PuzzleCam-Python
+```
+
+folder.
+
+If VS Code asks whether you trust the authors of the files in this folder, choose the appropriate option for your workshop repository.
+
+Then open a new terminal:
+
+```text
+Terminal → New Terminal
+```
+
+Make sure the terminal path ends with:
+
+```text
+\PuzzleCam-Python>
+```
+
+---
+
+### 4. Set Up PuzzleCam
+
+You only need to do this **once** after cloning the project.
+
+In the VS Code terminal, run:
 
 ```powershell
 .\setup.bat
@@ -78,27 +142,31 @@ INSTALLATION COMPLETE!
 PuzzleCam is ready.
 ```
 
-### 3. Run PuzzleCam
+---
 
-Run:
+### 5. Run PuzzleCam
 
-```powershell
-.\run.bat
-```
-
-That's it! 🎉
-
-### Next Time
-
-You do **not** need to run `setup.bat` again.
-
-Open the PuzzleCam folder and simply run:
+In the VS Code terminal, run:
 
 ```powershell
 .\run.bat
 ```
 
-You can also double-click `run.bat` from File Explorer.
+PuzzleCam should now open. 🎉
+
+---
+
+## 🔁 Running It Again Later
+
+You do **not** need to run `setup.bat` every time.
+
+Open the `PuzzleCam-Python` folder in VS Code, open the terminal, and run:
+
+```powershell
+.\run.bat
+```
+
+That's all!
 
 ---
 
@@ -162,7 +230,7 @@ Complete all:
 
 Then make a **fist and hold it**.
 
-The completed photo will shatter and PuzzleCam will automatically restart for another round.
+The completed photo will shatter and PuzzleCam will automatically restart.
 
 ---
 
@@ -211,47 +279,35 @@ PuzzleCam-Python/
 
 ## 🧠 How It Works
 
-PuzzleCam combines several Python libraries and programming concepts.
-
 ### OpenCV
 
-Used to:
-
-- Read frames from the webcam
-- Process captured images
-- Create the black-and-white photo effect
+- Reads frames from the webcam
+- Processes captured images
+- Creates the black-and-white photo effect
 
 ### MediaPipe
 
-Used to:
-
-- Detect hands
-- Track hand landmarks
-- Locate fingertips
-- Detect pinch gestures
-- Detect fist gestures
+- Detects hands
+- Tracks hand landmarks
+- Locates fingertips
+- Detects pinch and fist gestures
 
 ### Pygame
 
-Used to:
-
-- Display the game interface
-- Draw the puzzle and visual effects
-- Handle animations
-- Handle mouse and keyboard input
-- Play sound effects
+- Displays the game interface
+- Handles animations
+- Handles mouse and keyboard input
+- Plays sound effects
 
 ### NumPy
 
-Used for image and numerical operations, including the photo effect.
+- Performs image and numerical operations
 
 The project is divided into separate Python modules so you can explore how **computer vision, gesture recognition, image processing, and game logic** work together.
 
 ---
 
 ## 📦 Main Dependencies
-
-The main Python packages used are:
 
 ```text
 mediapipe
@@ -260,7 +316,7 @@ opencv-contrib-python
 pygame
 ```
 
-They are installed automatically when you run:
+These are installed automatically when you run:
 
 ```powershell
 .\setup.bat
@@ -272,7 +328,7 @@ They are installed automatically when you run:
 
 PuzzleCam is designed as an interactive Python workshop project for students learning how Python can be used beyond simple console programs.
 
-By exploring the code, you can learn about:
+By exploring the project, you can learn about:
 
 - Python modules
 - Classes and objects
@@ -315,15 +371,17 @@ Python may not be installed or may not have been added to your system PATH.
 
 Install **Python 3.11** and make sure **"Add Python to PATH"** is selected during installation.
 
-Then close and reopen PowerShell.
+Then restart VS Code and try again.
 
 ### `git` is not recognized
 
-Install Git for Windows, then close and reopen PowerShell before trying the clone command again.
+Git may not be installed or may not have been added to PATH.
+
+Install Git, restart VS Code, and open a new terminal.
 
 ### Camera does not open
 
-Close other applications that may already be using the webcam, such as:
+Close other programs that may be using your webcam, such as:
 
 - Camera
 - Zoom
@@ -331,7 +389,7 @@ Close other applications that may already be using the webcam, such as:
 - Discord
 - OBS
 
-Then restart PuzzleCam.
+Then run PuzzleCam again.
 
 ### `hand_landmarker.task` not found
 
@@ -341,48 +399,27 @@ Make sure this file exists:
 models/hand_landmarker.task
 ```
 
-If you cloned the complete repository, this file should already be included.
-
 ### Python packages are missing
 
-Run the setup script again:
+Run:
 
 ```powershell
 .\setup.bat
 ```
 
+again.
+
 ### No sound
 
-Make sure the sound files exist inside:
+Make sure these files exist:
 
 ```text
 assets/sounds/
-```
-
-The folder should contain:
-
-```text
-countdown.wav
-shutter.wav
-correct.wav
-wrong.wav
-shatter.wav
-```
-
-### Restart PuzzleCam
-
-Press:
-
-```text
-R
-```
-
-### Quit PuzzleCam
-
-Press:
-
-```text
-Q
+├── countdown.wav
+├── shutter.wav
+├── correct.wav
+├── wrong.wav
+└── shatter.wav
 ```
 
 ---
@@ -391,4 +428,4 @@ Q
 
 Experiment with the code, change the effects, modify the gestures, or add your own features.
 
-PuzzleCam is not just a game — it's a small example of what you can build when **Python meets computer vision and interaction**. 🚀
+PuzzleCam is a small example of what you can build when **Python meets computer vision and interaction**. 🚀
