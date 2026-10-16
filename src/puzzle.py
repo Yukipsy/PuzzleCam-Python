@@ -2,21 +2,14 @@ import cv2
 import numpy as np
 import random
 
-
 class Puzzle:
-
     def __init__(self, grid_size=3):
-
         self.grid_size = grid_size
-
         self.original_image = None
-
         self.pieces = []
         self.slots = []
-
         self.dragged_piece = None
         self.drag_origin_slot = None
-
         self.was_pinching = False
         self.completed = False
 
@@ -30,7 +23,6 @@ class Puzzle:
     # ========================================================
     # PHOTO EFFECT
     # ========================================================
-
     def apply_photo_effect(self, image):
 
         gray = cv2.cvtColor(
@@ -66,96 +58,43 @@ class Puzzle:
     # ========================================================
     # CREATE PUZZLE
     # ========================================================
-
     def create_puzzle(self, image):
 
-        self.original_image = (
-            self.apply_photo_effect(image)
-        )
-
-        height, width, _ = (
-            self.original_image.shape
-        )
+        self.original_image = (self.apply_photo_effect(image))
+        height, width, _ = (self.original_image.shape )
 
         # Make dimensions divisible by grid size
-        new_width = (
-            width - width % self.grid_size
-        )
-
-        new_height = (
-            height - height % self.grid_size
-        )
+        new_width = ( width - width % self.grid_size)
+        new_height = ( height - height % self.grid_size)
 
         self.original_image = cv2.resize(
             self.original_image,
-            (
-                new_width,
-                new_height
-            )
+            (new_width,new_height)
         )
 
-        height, width, _ = (
-            self.original_image.shape
-        )
-
-        piece_width = (
-            width // self.grid_size
-        )
-
-        piece_height = (
-            height // self.grid_size
-        )
-
+        height, width, _ = (self.original_image.shape)
+        piece_width = (width // self.grid_size)
+        piece_height = (height // self.grid_size)
         self.pieces = []
-
         piece_id = 0
 
         # ====================================================
         # CUT PHOTO INTO 3 x 3
         # ====================================================
-
-        for row in range(
-            self.grid_size
-        ):
-
-            for col in range(
-                self.grid_size
-            ):
-
-                x1 = (
-                    col * piece_width
-                )
-
-                y1 = (
-                    row * piece_height
-                )
-
-                x2 = (
-                    x1 + piece_width
-                )
-
-                y2 = (
-                    y1 + piece_height
-                )
-
-                piece_image = (
-                    self.original_image[
-                        y1:y2,
-                        x1:x2
-                    ].copy()
-                )
-
+        for row in range(self.grid_size):
+            for col in range(self.grid_size):
+                x1 = (col * piece_width)
+                y1 = (row * piece_height)
+                x2 = (x1 + piece_width)
+                y2 = (y1 + piece_height)
+                piece_image = (self.original_image[y1:y2,x1:x2].copy())
                 piece = {
                     "id": piece_id,
                     "image": piece_image,
                     "correct_row": row,
                     "correct_col": col
                 }
-
-                self.pieces.append(
-                    piece
-                )
-
+                self.pieces.append(piece)
                 piece_id += 1
 
         # ====================================================
@@ -167,31 +106,21 @@ class Puzzle:
         # Every new game therefore starts at 0 / 9.
         # ====================================================
 
-        self.slots = (
-            self.pieces.copy()
-        )
+        self.slots = (self.pieces.copy())
 
         while True:
-
-            random.shuffle(
-                self.slots
-            )
-
+            random.shuffle(self.slots)
             if self.get_progress() == 0:
                 break
 
         # ====================================================
         # RESET GAME STATE
         # ====================================================
-
         self.dragged_piece = None
         self.drag_origin_slot = None
-
         self.was_pinching = False
         self.completed = False
-
         self.just_snapped_slot = None
-
         self.last_drop_correct = None
         self.last_drop_slot = None
 
@@ -199,24 +128,14 @@ class Puzzle:
     # CHECK WHETHER PIECE IS CORRECT
     # ========================================================
 
-    def is_piece_correct(
-        self,
-        slot_index,
-        piece
-    ):
+    def is_piece_correct(self,slot_index,piece):
 
         if piece is None:
             return False
 
-        row = (
-            slot_index
-            // self.grid_size
-        )
+        row = (slot_index // self.grid_size)
 
-        col = (
-            slot_index
-            % self.grid_size
-        )
+        col = (slot_index % self.grid_size)
 
         return (
             piece["correct_row"] == row
@@ -227,17 +146,12 @@ class Puzzle:
     # ========================================================
     # GET CURRENT PROGRESS
     # ========================================================
-
     def get_progress(self):
-
         if not self.slots:
             return 0
-
         correct = 0
 
-        for slot_index, piece in enumerate(
-            self.slots
-        ):
+        for slot_index, piece in enumerate( self.slots):
 
             if self.is_piece_correct(
                 slot_index,
@@ -251,7 +165,6 @@ class Puzzle:
     # ========================================================
     # GET CORRECT SLOT OF A PIECE
     # ========================================================
-
     def get_correct_slot(
         self,
         piece

@@ -16,20 +16,14 @@ DEFAULT_MODEL_PATH = (
 # ============================================================
 # MEDIAPIPE LANDMARK NUMBERS
 # ============================================================
-
 WRIST = 0
-
 THUMB_TIP = 4
-
 INDEX_MCP = 5
 INDEX_TIP = 8
-
 MIDDLE_MCP = 9
 MIDDLE_TIP = 12
-
 RING_MCP = 13
 RING_TIP = 16
-
 PINKY_MCP = 17
 PINKY_TIP = 20
 
@@ -37,7 +31,6 @@ PINKY_TIP = 20
 # ============================================================
 # HAND SKELETON
 # ============================================================
-
 HAND_CONNECTIONS = [
     (0, 1), (1, 2), (2, 3), (3, 4),
 
@@ -58,28 +51,15 @@ HAND_CONNECTIONS = [
 
 
 class HandTracker:
-
-    def __init__(
-        self,
-        model_path=None
-    ):
-
+    def __init__(self,model_path=None):
         if model_path is None:
             model_path = DEFAULT_MODEL_PATH
-
         model_path = str(model_path)
-
         BaseOptions = mp.tasks.BaseOptions
         HandLandmarker = mp.tasks.vision.HandLandmarker
-        HandLandmarkerOptions = (
-            mp.tasks.vision.HandLandmarkerOptions
-        )
+        HandLandmarkerOptions = (mp.tasks.vision.HandLandmarkerOptions)
         RunningMode = mp.tasks.vision.RunningMode
-
-        options = HandLandmarkerOptions(
-            base_options=BaseOptions(
-                model_asset_path=model_path
-            ),
+        options = HandLandmarkerOptions(base_options=BaseOptions(model_asset_path=model_path),
             running_mode=RunningMode.IMAGE,
             num_hands=2,
             min_hand_detection_confidence=0.6,
@@ -87,12 +67,7 @@ class HandTracker:
             min_tracking_confidence=0.6
         )
 
-        self.detector = (
-            HandLandmarker.create_from_options(
-                options
-            )
-        )
-
+        self.detector = (HandLandmarker.create_from_options(options))
         # Pinch state for each detected hand
         self.pinch_states = [
             False,
@@ -106,7 +81,6 @@ class HandTracker:
     # ========================================================
     # DISTANCE
     # ========================================================
-
     def distance(
         self,
         point_a,
@@ -203,96 +177,38 @@ class HandTracker:
     # DRAW HAND
     # ========================================================
 
-    def draw_hand(
-        self,
-        frame,
-        landmarks
-    ):
-
+    def draw_hand(self,frame,landmarks):
         height, width, _ = frame.shape
-
         points = []
 
         for landmark in landmarks:
-
-            x = int(
-                landmark.x * width
-            )
-
-            y = int(
-                landmark.y * height
-            )
-
-            points.append(
-                (x, y)
-            )
+            x = int(landmark.x * width)
+            y = int(landmark.y * height)
+            points.append((x, y))
 
         # Skeleton lines
         for start, end in HAND_CONNECTIONS:
-
-            cv2.line(
-                frame,
-                points[start],
-                points[end],
-                (255, 255, 255),
-                2
-            )
+            cv2.line(frame,points[start],points[end],(255, 255, 255),2)
 
         # Landmark dots
         for point in points:
-
-            cv2.circle(
-                frame,
-                point,
-                4,
-                (255, 255, 255),
-                -1
-            )
-
+            cv2.circle(frame,point,4,(255, 255, 255),-1)
         return points
 
     # ========================================================
     # DETECT
     # ========================================================
-
     def detect(self, frame):
-
-        rgb_frame = cv2.cvtColor(
-            frame,
-            cv2.COLOR_BGR2RGB
-        )
-
-        mp_image = mp.Image(
-            image_format=mp.ImageFormat.SRGB,
-            data=rgb_frame
-        )
-
-        result = self.detector.detect(
-            mp_image
-        )
-
+        rgb_frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB,data=rgb_frame)
+        result = self.detector.detect(mp_image)
         hands = []
 
         if result.hand_landmarks:
-
-            for hand_index, landmarks in enumerate(
-                result.hand_landmarks
-            ):
-
-                points = self.draw_hand(
-                    frame,
-                    landmarks
-                )
-
-                pinching = self.is_pinching(
-                    landmarks,
-                    hand_index
-                )
-
-                fist = self.is_fist(
-                    landmarks
-                )
-
+            for hand_index, landmarks in enumerate(result.hand_landmarks):
+                points = self.draw_hand(frame,landmarks)
+                pinching = self.is_pinching(landmarks,hand_index)
+                fist = self.is_fist(landmarks)
                 hands.append({
                     "landmarks": landmarks,
                     "points": points,
@@ -312,7 +228,6 @@ class HandTracker:
     # ========================================================
     # TWO-HAND PHOTO FRAME
     # ========================================================
-
     def get_hand_frame(
         self,
         hands,
